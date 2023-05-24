@@ -1,0 +1,27 @@
+<div class="container mt-4">
+    <h1>Update Daily Expense Form</h1>
+    <form #updateExpenseDetail="ngForm" (ngSubmit)="onUpdateExpenseDetail()">
+      <div class="mb-3">
+        <label for="updateDate" class="form-label">Date</label>
+        <input type="date" class="form-control" id="updateDate" required name="updateDate" [(ngModel)]="updateDate" >
+      </div>
+      <div class="mb-3">
+        <label for="updateCategory" class="form-label">Category</label>
+        <select class="form-select" id="updateCategory" required name="updateCategory" [(ngModel)]="updateCategory">
+          <!-- <option ngModel="updateCategory"
+          name="updateCategory"></option>   -->
+          <option *ngFor="let cat of loadedExCats" >{{ cat.expenseCategoryName }}</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="updateAmount" class="form-label">Expense Amount</label>
+        <input type="number" class="form-control" id="updateAmount" step="0.01" required [(ngModel)]="updateAmount" name="updateAmount">
+      </div>
+      <div class="mb-3">
+        <label for="updateDescription" class="form-label">Description</label>
+        <textarea class="form-control" id="updateDescription" rows="3" [(ngModel)]="updateDescription" name="updateDescription"></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+      <button type="button" class="btn btn-secondary" routerLink="/">Cancel</button>
+    </form>
+    </div>

@@ -1,0 +1,33 @@
+<div class="container mt-4">
+  <h1>Daily Income Form</h1>
+  <form #incomeDetail="ngForm" (ngSubmit)="onAddIncomeDetail(incomeDetail.value)">
+    <div class="mb-3">
+      <label for="inputDate" class="form-label">Date</label>
+      <input type="date" class="form-control" id="date" required name="date" ngModel [(ngModel)]="date" [disabled]="isDisabled">
+    </div>
+    <div class="mb-3">
+      <label for="inputCategory" class="form-label">Category</label>
+      <select class="form-select" id="category" required name="category" ngModel="category">
+        <option *ngFor="let cat of loadedInCats" >{{ cat.incomeCategoryName }}</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="inputAmount" class="form-label">Expense Amount</label>
+      <input type="number" class="form-control" id="inputAmount" step="0.01" required ngModel name="amount">
+    </div>
+    <div class="mb-3">
+      <label for="inputDescription" class="form-label">Description</label>
+      <textarea class="form-control" id="inputDescription" rows="3" ngModel name="description"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="button" class="btn btn-secondary" routerLink="">Cancel</button>
+  </form>
+  <h2>Submit Income Category</h2>
+  <form #incomeCategoryForm="ngForm" (ngSubmit)="onAddCategory(incomeCategoryForm.value)">
+    <div class="mb-3">
+      <label for="inputExpenseCategory" class="form-label">Category Name</label>
+      <input type="text" class="form-control" id="incomeCategoryName" required ngModel name="incomeCategoryName">
+    </div>
+    <button type="submit" class="btn btn-primary">Submit Category</button>
+  </form>
+</div>

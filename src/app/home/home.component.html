@@ -1,0 +1,74 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="#">Daily Expense Manager</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" routerLink="expense">Add Expense</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" routerLink="income">Add Income</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container mt-5">
+    <h2>List of Incomes</h2>
+    <table class="table table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th class="fixed-width">ID</th>
+                <th class="fixed-width">Category</th>
+                <th class="fixed-width">Amount</th>
+                <th class="fixed-width">Description</th>
+                <th class="fixed-width">Income Date</th>
+                <th class="fixed-width">Delete Data</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let inDet of loadedIncomeDetails; let i = index" >
+                <td class="fixed-width">{{ i + 1 }}</td>
+                <td class="fixed-width">{{ inDet.category }}</td>
+                <td class="fixed-width">{{ inDet.amount }}</td>
+                <td class="fixed-width">{{ inDet.description }}</td>
+                <td class="fixed-width">{{ inDet.date }}</td>
+                <td class="fixed-width"><button class="btn btn-secondary btn-sm" (click)="writeIncomeUpdate(inDet)" routerLink="/updateIncome">Update</button>
+                    <span style="margin-left: 10px;"></span>
+                    <button class="btn btn-danger btn-sm" (click)="onIncomeDelete(inDet)">Delete</button></td>
+            </tr>
+            <!-- Add more rows here -->
+        </tbody>
+    </table>
+
+    <h2>List of Expenses</h2>
+    <table class="table table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th class="fixed-width">ID</th>
+                <th class="fixed-width">Category</th>
+                <th class="fixed-width">Amount</th>
+                <th class="fixed-width">Description</th>
+                <th class="fixed-width">Expense Date</th>
+                <th class="fixed-width">Delete Data</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let exDet of loadedExpenseDetails; let i = index">
+                <td class="fixed-width">{{ i + 1 }}</td>
+                <td class="fixed-width">{{ exDet.category }}</td>
+                <td class="fixed-width">{{ exDet.amount }}</td>
+                <td class="fixed-width">{{ exDet.description }}</td>
+                <td class="fixed-width">{{ exDet.date }}</td>
+                <td class="fixed-width"><button class="btn btn-secondary btn-sm" (click)="writeExpenseUpdate(exDet)" routerLink="/updateExpense">Update</button>
+                    <span style="margin-left: 10px;"></span>
+                    <button class="btn btn-danger btn-sm" (click)="onExpenseDelete(exDet)">Delete</button></td>
+            </tr>
+            <!-- Add more rows here -->
+        </tbody>
+    </table>
+</div>
