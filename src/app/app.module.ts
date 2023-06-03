@@ -8,12 +8,13 @@ import { SignUpComponent } from './sign-up/sign-up.component';
 import { HomeComponent } from './home/home.component';
 import { ExpenseComponent } from './expense/expense.component';
 import { IncomeComponent } from './income/income.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule, DatePipe } from '@angular/common';
 import { UpdateExpenseComponent } from './update-expense/update-expense.component';
 import { UpdateIncomeComponent } from './update-income/update-income.component';
 import { ExpenseService } from './expense.service';
 import { IncomeService } from './income.service';
+import { AuthGuardService } from './auth-guard.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,9 +30,10 @@ import { IncomeService } from './income.service';
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    CommonModule
+    CommonModule,
+    ReactiveFormsModule
   ],
-  providers: [DatePipe, ExpenseService, IncomeService],
+  providers: [DatePipe, ExpenseService, IncomeService, AuthGuardService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

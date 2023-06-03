@@ -86,9 +86,11 @@ export class IncomeService {
     return this.http.patch(this.IncomeDetailURL,data).subscribe(
       (response) =>{
         console.log(response);
+        alert("Data Updated!");
       },
       error => {
         console.log(error)
+        alert("Error Update!");
       }
     )
   }

@@ -1,25 +1,47 @@
-
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-md-6">
-        <div class="card">
-          <div class="card-body">
-            <h3 class="card-title text-center">Login</h3>
-            <form>
-              <div class="form-group">
-                <label for="loginEmail">Email address</label>
-                <input type="email" class="form-control" id="loginEmail" placeholder="Enter email">
-              </div>
-              <div class="form-group">
-                <label for="loginPassword">Password</label>
-                <input type="password" class="form-control" id="loginPassword" placeholder="Password">
-              </div>
-              <button type="submit" class="btn btn-primary btn-block">Login</button>
-            </form>
-          </div>
+<br><br>
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body">
+          <h3 class="card-title text-center">Login</h3>
+          <form [formGroup]="loginForm">
+            <div class="form-group">
+              <label for="loginEmail">Email address</label>
+              <input type="email" class="form-control" id="loginEmail" placeholder="Enter email" 
+              ngModel 
+              formControlName="email"
+              required
+              email>
+              <small class="form-text text-muted danger" *ngIf="loginForm.get('email').invalid && (loginForm.get('email').dirty || loginForm.get('email').touched)">
+                Email is required or Invalid
+              </small>
+            </div>
+            <div class="form-group">
+              <label for="loginPassword">Password</label>
+              <input type="password" class="form-control" id="loginPassword" placeholder="Password"
+              ngModel
+              formControlName="password"
+              required
+              minlength="6" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">
+              <small class="form-text text-muted danger" *ngIf="loginForm.get('password').invalid && (loginForm.get('password').dirty || loginForm.get('password').touched)">
+                Must contain at least 1 number, 1 uppercase, 1 lowercase letter, and at least 8 characters
+              </small>
+            </div>
+            <br>
+            <div class="justify-content-center text-center">
+              <button type="submit" class="btn btn-primary btn-block" [disabled]="!loginForm.valid" (click)="onSubmit()">Login</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
-  </div>   
-
-
+  </div>
+</div>  
+<br>
+<div class="justify-content-center text-center">
+  <div>
+    <label for="">Doesn't have account?</label>
+  </div>
+  <button type="button" class="btn btn-outline-secondary" (click)="goToSignUp()">Sign Up</button>
+</div>

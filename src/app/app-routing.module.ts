@@ -8,9 +8,10 @@ import { IncomeComponent } from './income/income.component';
 import { HttpClientModule } from '@angular/common/http';
 import { UpdateIncomeComponent } from './update-income/update-income.component';
 import { UpdateExpenseComponent } from './update-expense/update-expense.component';
+import { AuthGuardService } from './auth-guard.service';
 const routes: Routes = [
   {
-    path: '', component: HomeComponent
+    path: '', component: HomeComponent, canActivate: [AuthGuardService]
   },
   {
     path: 'login', component: LoginComponent
@@ -19,16 +20,16 @@ const routes: Routes = [
     path: 'signUp', component: SignUpComponent
   },
   {
-    path: 'expense', component: ExpenseComponent
+    path: 'expense', component: ExpenseComponent, canActivate: [AuthGuardService]
   },
   {
-    path: 'income', component: IncomeComponent
+    path: 'income', component: IncomeComponent, canActivate: [AuthGuardService]
   },
   {
-    path: 'updateIncome', component: UpdateIncomeComponent
+    path: 'updateIncome', component: UpdateIncomeComponent, canActivate: [AuthGuardService]
   },
   {
-    path: 'updateExpense', component: UpdateExpenseComponent
+    path: 'updateExpense', component: UpdateExpenseComponent, canActivate: [AuthGuardService]
   }
 ];
 
