@@ -48,10 +48,10 @@ export class LoginComponent implements OnInit {
             (data) => {
               data.forEach(element => {
                 if(element.email === email){
-                  this.authServ.name = element.name;
+                  this.authServ.email = element.email;
                   swal.fire({
                     title: "Welcome!",
-                    text: this.authServ.name,
+                    text: element.name,
                     showConfirmButton: true,
                     icon: "success",
                   });

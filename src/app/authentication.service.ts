@@ -33,7 +33,7 @@ export const AUTHENTICATED_USER = "authenticatedUser";
 export class AuthenticationService {
   public parameter: number = 0;
   authenticated = false;
-  name:string = "";
+  email:string = "";
 
   constructor(private router: Router, private http: HttpClient) {}
 
@@ -64,7 +64,7 @@ export class AuthenticationService {
 
   doLogout() {
     this.authenticated = false;
-    this.name = "";
+    this.email = "";
   }
 
   doLogin(authData: AuthRequestData) {
