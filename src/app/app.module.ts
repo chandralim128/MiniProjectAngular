@@ -24,7 +24,7 @@ import { AuthGuardService } from './auth-guard.service';
     ExpenseComponent,
     IncomeComponent,
     UpdateExpenseComponent,
-    UpdateIncomeComponent
+    UpdateIncomeComponent,
   ],
   imports: [
     BrowserModule,

@@ -3,6 +3,8 @@ import { ExpenseService } from '../expense.service';
 import { HomeComponent } from '../home/home.component';
 import { DatePipe } from '@angular/common';
 import { expenseDetail } from '../expense/expense.model';
+import { Router } from '@angular/router';
+import swal from "sweetalert2";
 @Component({
   selector: 'app-update-expense',
   templateUrl: './update-expense.component.html',
@@ -16,7 +18,7 @@ export class UpdateExpenseComponent implements OnInit {
   updateDate: string;
   loadedExCats = [];
   isDisabled: boolean;
-  constructor(private expenseService: ExpenseService,private datePipe: DatePipe) {
+  constructor(private expenseService: ExpenseService,private datePipe: DatePipe, private router: Router) {
    }
 
   ngOnInit(): void {
@@ -37,7 +39,26 @@ export class UpdateExpenseComponent implements OnInit {
       amount: this.updateAmount
   }
     console.log(updatedData);
-    this.expenseService.updateExpenseDetail(updatedData);
+    this.expenseService.updateExpenseDetail(updatedData).subscribe(
+      response =>{
+        console.log(response);
+        swal.fire({
+          title: "Success!",
+          text: "Data Updated!",
+          showConfirmButton: true,
+          icon: "success",
+        });
+        this.router.navigate([""]);
+      },
+      error => {
+        swal.fire({
+          title: "Error!",
+          text: error,
+          showConfirmButton: true,
+          icon: "error",
+        });
+      }
+    );
   }
   onFetchCategory(){
     this.expenseService.fetchExpenseCategory().subscribe(

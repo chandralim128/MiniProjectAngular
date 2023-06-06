@@ -20,32 +20,18 @@ export class ExpenseService {
   constructor(private http: HttpClient) { }
 
   addExpenseCategory(exCat: expenseCategory){
-    this.http.post<{name: string}>(this.ExpenseCategoryURL, exCat, {
+    return this.http.post<{name: string}>(this.ExpenseCategoryURL, exCat, {
       observe: 'response',
       responseType: 'json'
-    }).subscribe(
-      (data) => {
-        console.log(data);
-      },
-      (error) =>{
-        console.log(error);
-      }
-    );
+    });
   }
   addExpenseDetail(exDet: expenseDetail){
     console.log(exDet);
     console.log(exDet.date);
-    this.http.post<{date: string}>(this.ExpenseDetailURL, exDet, {
+    return this.http.post<{date: string}>(this.ExpenseDetailURL, exDet, {
       observe: 'response',
       responseType: 'json'
-    }).subscribe(
-      (data) => {
-        console.log(data);
-      },
-      (error) =>{
-        console.log(error);
-      }
-    );
+    });
   }
   fetchExpenseCategory(){
     return this.http.get<{[key: string] : expenseCategory}>(this.ExpenseCategoryURL,{
@@ -93,25 +79,11 @@ export class ExpenseService {
       date : updatedData.date,
       description: updatedData.description
     }}
-    return this.http.patch(this.ExpenseDetailURL,data).subscribe(
-      (response) =>{
-        console.log(response);
-      },
-      error => {
-        console.log(error)
-      }
-    )
+    return this.http.patch(this.ExpenseDetailURL,data);
   }
   deleteExpenseDetail(deletedData: expenseDetail){
     let deleteExpenseURL = this.endPointURL+"ExpenseDetailURL/"+deletedData.id+".json";
     console.log(deleteExpenseURL);
-    return this.http.delete(deleteExpenseURL).subscribe(
-      (response) =>{
-        console.log(response);
-      },
-      error => {
-        console.log(error)
-      }
-    )
+    return this.http.delete(deleteExpenseURL);
   }
 }

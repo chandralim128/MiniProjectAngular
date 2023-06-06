@@ -18,32 +18,18 @@ export class IncomeService {
   constructor(private http: HttpClient) { }
 
   addIncomeCategory(inCat: incomeCategory){
-    this.http.post<{name: string}>(this.IncomeCategoryURL, inCat, {
+    return this.http.post<{name: string}>(this.IncomeCategoryURL, inCat, {
       observe: 'response',
       responseType: 'json'
-    }).subscribe(
-      (data) => {
-        console.log(data);
-      },
-      (error) =>{
-        console.log(error);
-      }
-    );
+    });
   }
   addIncomeDetail(inDet: incomeDetail){
     console.log(inDet);
     console.log(inDet.date);
-    this.http.post<{date: string}>(this.IncomeDetailURL, inDet, {
+    return this.http.post<{date: string}>(this.IncomeDetailURL, inDet, {
       observe: 'response',
       responseType: 'json'
-    }).subscribe(
-      (data) => {
-        console.log(data);
-      },
-      (error) =>{
-        console.log(error);
-      }
-    );
+    });
   }
   fetchIncomeCategory(){
     return this.http.get<{[key: string] : incomeCategory}>(this.IncomeCategoryURL,{
@@ -83,16 +69,7 @@ export class IncomeService {
       date : updatedData.date,
       description: updatedData.description
     }}
-    return this.http.patch(this.IncomeDetailURL,data).subscribe(
-      (response) =>{
-        console.log(response);
-        alert("Data Updated!");
-      },
-      error => {
-        console.log(error)
-        alert("Error Update!");
-      }
-    )
+    return this.http.patch(this.IncomeDetailURL,data);
   }
   getUpdateData(inDet: incomeDetail){
     console.log(inDet);
@@ -105,13 +82,6 @@ export class IncomeService {
   deleteIncomeDetail(deletedData: incomeDetail){
     let deleteIncomeURL = this.endPointURL+"IncomeDetailURL/"+deletedData.id+".json";
     console.log(deleteIncomeURL);
-    return this.http.delete(deleteIncomeURL).subscribe(
-      (response) =>{
-        console.log(response);
-      },
-      error => {
-        console.log(error)
-      }
-    )
+    return this.http.delete(deleteIncomeURL);
   }
 }

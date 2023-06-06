@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { incomeDetail } from '../income/income.model';
 import { IncomeService } from '../income.service';
 import { DatePipe } from '@angular/common';
+import swal from "sweetalert2";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-update-income',
@@ -16,7 +18,7 @@ export class UpdateIncomeComponent implements OnInit {
   updateDate: string;
   loadedInCats = [];
   isDisabled: boolean;
-  constructor(private incomeService: IncomeService,private datePipe: DatePipe) { }
+  constructor(private incomeService: IncomeService,private datePipe: DatePipe, private router: Router) { }
 
   ngOnInit(): void {
     this.isDisabled = true;
@@ -36,7 +38,27 @@ export class UpdateIncomeComponent implements OnInit {
       amount: this.updateAmount
   }
     console.log(updatedData);
-    this.incomeService.updateIncomeDetail(updatedData);
+    this.incomeService.updateIncomeDetail(updatedData).subscribe(
+      (response) =>{
+        console.log(response);
+        swal.fire({
+          title: "Success!",
+          text: "Data Updated!",
+          showConfirmButton: true,
+          icon: "success",
+        });
+        this.router.navigate([""]);
+      },
+      error => {
+        console.log(error)
+        swal.fire({
+          title: "Error!",
+          text: error,
+          showConfirmButton: true,
+          icon: "error",
+        });
+      }
+    );
   }
   onFetchCategory(){
     this.incomeService.fetchIncomeCategory().subscribe(

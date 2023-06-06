@@ -3,6 +3,7 @@ import { ExpenseService } from '../expense.service';
 import { IncomeService } from '../income.service';
 import { expenseDetail } from '../expense/expense.model';
 import { incomeDetail } from '../income/income.model';
+import swal from "sweetalert2";
 
 @Component({
   selector: 'app-home',
@@ -51,10 +52,48 @@ export class HomeComponent implements OnInit {
   }
   onExpenseDelete(deletedExpenseDetail: expenseDetail){
     console.log(deletedExpenseDetail);
-    this.expenseService.deleteExpenseDetail(deletedExpenseDetail);
+    this.expenseService.deleteExpenseDetail(deletedExpenseDetail).subscribe(
+      (response) =>{
+        console.log(response);
+        swal.fire({
+          title: "Success!",
+          text: "Data Deleted!",
+          showConfirmButton: true,
+          icon: "success",
+        });
+      },
+      error => {
+        console.log(error)
+        swal.fire({
+          title: "Error!",
+          text: error,
+          showConfirmButton: true,
+          icon: "error",
+        });
+      }
+    );
   }
   onIncomeDelete(deletedIncomeDetail: incomeDetail){
     console.log(deletedIncomeDetail);
-    this.incomeService.deleteIncomeDetail(deletedIncomeDetail);
+    this.incomeService.deleteIncomeDetail(deletedIncomeDetail).subscribe(
+      (response) =>{
+        console.log(response);
+        swal.fire({
+          title: "Success!",
+          text: "Data Deleted!",
+          showConfirmButton: true,
+          icon: "success",
+        });
+      },
+      error => {
+        console.log(error)
+        swal.fire({
+          title: "Error!",
+          text: error,
+          showConfirmButton: true,
+          icon: "error",
+        });
+      }
+    );
   }
 }
