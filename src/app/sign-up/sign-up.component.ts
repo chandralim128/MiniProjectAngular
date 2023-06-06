@@ -69,6 +69,7 @@ export class SignUpComponent implements OnInit {
         resdata => {
           console.log(resdata);
           this.authServ.authenticated = true;
+          this.authServ.name = name;
           this.authServ.insertToDb(userData);
           this.router.navigate([""]);
           swal.fire({
