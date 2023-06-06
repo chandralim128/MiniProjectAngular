@@ -41,7 +41,6 @@ export class LoginComponent implements OnInit {
     } else {
       this.authServ.doLogin(authReqData).subscribe(
         resdata => {
-          console.log(resdata);
           this.authServ.authenticated = true;
           this.router.navigate([""]);
           this.authServ.fetchAccount().subscribe(

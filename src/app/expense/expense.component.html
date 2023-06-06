@@ -1,33 +1,55 @@
 <div class="container mt-4">
     <h1>Daily Expense Form</h1>
-    <form #expenseDetail="ngForm" (ngSubmit)="onAddExpenseDetail(expenseDetail.value)">
-      <div class="mb-3">
-        <label for="inputDate" class="form-label">Date</label>
-        <input type="date" class="form-control" id="date" required name="date" [(ngModel)]="date" [disabled]="isDisabled">
+    <form class="form" [formGroup]="expenseDetailForm" id="expenseDetailForm">
+      <div class="mb-3 form-group">
+        <label for="date">Date</label>
+        <input type="date" class="form-control" id="date" ngModel
+        formControlName="date" required
+        required>
+        <small class="form-text text-muted danger" *ngIf="expenseDetailForm.get('date').invalid && (expenseDetailForm.get('date').dirty || expenseDetailForm.get('date').touched)">
+          Date is required
+        </small>
       </div>
-      <div class="mb-3">
-        <label for="inputCategory" class="form-label">Category</label>
-        <select class="form-select" id="category" required name="category" ngModel="category">
-          <option *ngFor="let cat of loadedExCats" >{{ cat.expenseCategoryName }}</option>
+      <div class="mb-3 form-group">
+        <label for="category" class="form-label">Category</label>
+        <select class="form-select" id="category" ngModel 
+        formControlName="category"
+        required>
+          <option value="{{ cat.expenseCategoryName }}" *ngFor="let cat of loadedExCats" >{{ cat.expenseCategoryName }}</option>
         </select>
+        <small class="form-text text-muted danger" *ngIf="expenseDetailForm.get('category').invalid && (expenseDetailForm.get('category').dirty || expenseDetailForm.get('category').touched)">
+          Category is required
+        </small>
       </div>
-      <div class="mb-3">
-        <label for="inputAmount" class="form-label">Expense Amount</label>
-        <input type="number" class="form-control" id="inputAmount" step="0.01" required ngModel name="amount">
+      <div class="mb-3 form-group">
+        <label for="amount" class="form-label">Expense Amount</label>
+        <input type="number" class="form-control" id="amount" step="0.01" ngModel 
+        formControlName="amount"
+        required>
+        <small class="form-text text-muted danger" *ngIf="expenseDetailForm.get('amount').invalid && (expenseDetailForm.get('amount').dirty || expenseDetailForm.get('amount').touched)">
+          Amount is required
+        </small>
       </div>
-      <div class="mb-3">
-        <label for="inputDescription" class="form-label">Description</label>
-        <textarea class="form-control" id="inputDescription" rows="3" ngModel name="description"></textarea>
+      <div class="mb-3 form-group">
+        <label for="description" class="form-label">Description</label>
+        <textarea class="form-control" id="description" rows="3" ngModel 
+        formControlName="description"
+        required></textarea>
+        <small class="form-text text-muted danger" *ngIf="expenseDetailForm.get('description').invalid && (expenseDetailForm.get('description').dirty || expenseDetailForm.get('description').touched)">
+          Description is required
+        </small>
       </div>
-      <button type="submit" class="btn btn-primary">Submit</button>
+      <button type="submit" class="btn btn-primary" [disabled]="!expenseDetailForm.valid" (click)="onAddExpenseDetail()">Submit</button>
+      <span style="margin-left: 10px;"></span>
       <button type="button" class="btn btn-secondary" routerLink="">Cancel</button>
     </form>
+    <br><br>
     <h2>Submit Expense Category</h2>
     <form #expenseCategoryForm="ngForm" (ngSubmit)="onAddCategory(expenseCategoryForm.value)">
-      <div class="mb-3">
+      <div class="mb-3 form-group">
         <label for="inputExpenseCategory" class="form-label">Category Name</label>
         <input type="text" class="form-control" id="expenseCategoryName" required ngModel name="expenseCategoryName">
       </div>
-      <button type="submit" class="btn btn-primary">Submit Category</button>
+      <button type="submit" class="btn btn-primary" [disabled]="!expenseCategoryForm.valid">Submit Category</button>
     </form>
   </div>

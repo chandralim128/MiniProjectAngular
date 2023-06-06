@@ -67,7 +67,6 @@ export class SignUpComponent implements OnInit {
     } else {
       this.authServ.doSignUp(authReqData).subscribe(
         resdata => {
-          console.log(resdata);
           this.authServ.authenticated = true;
           this.authServ.email = email;
           this.authServ.insertToDb(userData);

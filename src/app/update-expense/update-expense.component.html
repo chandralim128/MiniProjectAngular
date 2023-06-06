@@ -1,28 +1,46 @@
 <div class="container mt-4">
     <h1>Update Daily Expense Form</h1>
-    <form #updateExpenseDetail="ngForm" (ngSubmit)="onUpdateExpenseDetail()">
-      <div class="mb-3">
-        <label for="updateDate" class="form-label">Date</label>
-        <input type="date" class="form-control" id="updateDate" required name="updateDate" [(ngModel)]="updateDate" >
+    <form class="form" [formGroup]="updateExpenseForm" id="updateExpenseForm">
+      <div class="mb-3 form-group">
+        <label for="date">Date</label>
+        <input type="date" class="form-control" id="date" ngModel 
+        formControlName="date" required
+        required>
+        <small class="form-text text-muted danger" *ngIf="updateExpenseForm.get('date').invalid && (updateExpenseForm.get('date').dirty || updateExpenseForm.get('date').touched)">
+          Date is required
+        </small>
       </div>
-      <div class="mb-3">
-        <label for="updateCategory" class="form-label">Category</label>
-        <select class="form-select" id="updateCategory" required name="updateCategory" [(ngModel)]="updateCategory">
-          <!-- <option ngModel="updateCategory"
-          name="updateCategory"></option>   -->
-          <option *ngFor="let cat of loadedExCats" >{{ cat.expenseCategoryName }}</option>
+      <div class="mb-3 form-group">
+        <label for="category" class="form-label">Category</label>
+        <select class="form-select" id="category" ngModel 
+        formControlName="category"
+        required>
+          <option value="{{ cat.expenseCategoryName }}" *ngFor="let cat of loadedExCats" >{{ cat.expenseCategoryName }}</option>
         </select>
+        <small class="form-text text-muted danger" *ngIf="updateExpenseForm.get('category').invalid && (updateExpenseForm.get('category').dirty || updateExpenseForm.get('category').touched)">
+          Category is required
+        </small>
       </div>
-      <div class="mb-3">
-        <label for="updateAmount" class="form-label">Expense Amount</label>
-        <input type="number" class="form-control" id="updateAmount" step="0.01" required [(ngModel)]="updateAmount" name="updateAmount">
+      <div class="mb-3 form-group">
+        <label for="amount" class="form-label">Expense Amount</label>
+        <input type="number" class="form-control" id="amount" step="0.01" ngModel 
+        formControlName="amount"
+        required>
+        <small class="form-text text-muted danger" *ngIf="updateExpenseForm.get('amount').invalid && (updateExpenseForm.get('amount').dirty || updateExpenseForm.get('amount').touched)">
+          Amount is required
+        </small>
       </div>
-      <div class="mb-3">
-        <label for="updateDescription" class="form-label">Description</label>
-        <textarea class="form-control" id="updateDescription" rows="3" [(ngModel)]="updateDescription" name="updateDescription"></textarea>
+      <div class="mb-3 form-group">
+        <label for="description" class="form-label">Description</label>
+        <textarea class="form-control" id="description" rows="3" ngModel 
+        formControlName="description"
+        required></textarea>
+        <small class="form-text text-muted danger" *ngIf="updateExpenseForm.get('description').invalid && (updateExpenseForm.get('description').dirty || updateExpenseForm.get('description').touched)">
+          Description is required
+        </small>
       </div>
-      <button type="submit" class="btn btn-primary">Submit</button>
+      <button type="button" class="btn btn-primary" [disabled]="!updateExpenseForm.valid" (click)="onUpdateExpenseDetail()">Submit</button>
       <span style="margin-left: 10px;"></span>
-      <button type="button" class="btn btn-secondary" routerLink="/">Cancel</button>
+      <button type="button" class="btn btn-secondary" routerLink="">Cancel</button>
     </form>
-    </div>
+</div>

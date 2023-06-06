@@ -1,33 +1,55 @@
 <div class="container mt-4">
   <h1>Daily Income Form</h1>
-  <form #incomeDetail="ngForm" (ngSubmit)="onAddIncomeDetail(incomeDetail.value)">
-    <div class="mb-3">
-      <label for="inputDate" class="form-label">Date</label>
-      <input type="date" class="form-control" id="date" required name="date" ngModel [(ngModel)]="date" [disabled]="isDisabled">
+  <form class="form" [formGroup]="incomeDetailForm" id="incomeDetailForm">
+    <div class="mb-3 form-group">
+      <label for="date">Date</label>
+      <input type="date" class="form-control" id="date" ngModel
+      formControlName="date" required
+      required>
+      <small class="form-text text-muted danger" *ngIf="incomeDetailForm.get('date').invalid && (incomeDetailForm.get('date').dirty || incomeDetailForm.get('date').touched)">
+        Date is required
+      </small>
     </div>
-    <div class="mb-3">
-      <label for="inputCategory" class="form-label">Category</label>
-      <select class="form-select" id="category" required name="category" ngModel="category">
-        <option *ngFor="let cat of loadedInCats" >{{ cat.incomeCategoryName }}</option>
+    <div class="mb-3 form-group">
+      <label for="category" class="form-label">Category</label>
+      <select class="form-select" id="category" ngModel 
+      formControlName="category"
+      required>
+        <option value="{{ cat.incomeCategoryName }}" *ngFor="let cat of loadedInCats" >{{ cat.incomeCategoryName }}</option>
       </select>
+      <small class="form-text text-muted danger" *ngIf="incomeDetailForm.get('category').invalid && (incomeDetailForm.get('category').dirty || incomeDetailForm.get('category').touched)">
+        Category is required
+      </small>
     </div>
-    <div class="mb-3">
-      <label for="inputAmount" class="form-label">Income Amount</label>
-      <input type="number" class="form-control" id="inputAmount" step="0.01" required ngModel name="amount">
+    <div class="mb-3 form-group">
+      <label for="amount" class="form-label">Income Amount</label>
+      <input type="number" class="form-control" id="amount" step="0.01" ngModel 
+      formControlName="amount"
+      required>
+      <small class="form-text text-muted danger" *ngIf="incomeDetailForm.get('amount').invalid && (incomeDetailForm.get('amount').dirty || incomeDetailForm.get('amount').touched)">
+        Amount is required
+      </small>
     </div>
-    <div class="mb-3">
-      <label for="inputDescription" class="form-label">Description</label>
-      <textarea class="form-control" id="inputDescription" rows="3" ngModel name="description"></textarea>
+    <div class="mb-3 form-group">
+      <label for="description" class="form-label">Description</label>
+      <textarea class="form-control" id="description" rows="3" ngModel 
+      formControlName="description"
+      required></textarea>
+      <small class="form-text text-muted danger" *ngIf="incomeDetailForm.get('description').invalid && (incomeDetailForm.get('description').dirty || incomeDetailForm.get('description').touched)">
+        Description is required
+      </small>
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit" class="btn btn-primary" [disabled]="!incomeDetailForm.valid" (click)="onAddIncomeDetail()">Submit</button>
+    <span style="margin-left: 10px;"></span>
     <button type="button" class="btn btn-secondary" routerLink="">Cancel</button>
   </form>
+  <br><br>
   <h2>Submit Income Category</h2>
   <form #incomeCategoryForm="ngForm" (ngSubmit)="onAddCategory(incomeCategoryForm.value)">
     <div class="mb-3">
-      <label for="inputExpenseCategory" class="form-label">Category Name</label>
+      <label for="incomeCategoryName" class="form-label">Category Name</label>
       <input type="text" class="form-control" id="incomeCategoryName" required ngModel name="incomeCategoryName">
     </div>
-    <button type="submit" class="btn btn-primary">Submit Category</button>
+    <button type="submit" class="btn btn-primary" [disabled]="!incomeCategoryForm.valid">Submit Category</button>
   </form>
 </div>

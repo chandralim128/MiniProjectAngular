@@ -1,23 +1,33 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpEventType, HttpHeaders, HttpParams } from '@angular/common/http';
-import { expenseCategory } from './expense/expenseCategory.model';
-import { map, tap } from 'rxjs/operators';
-import { expenseDetail } from './expense/expense.model';
-import { incomeDetail } from './income/income.model';
+import { HttpClient } from '@angular/common/http';
+import { map } from 'rxjs/operators';
+import { AuthenticationService } from './authentication.service';
+
+export interface expenseCategory{
+  id?: string,
+  expenseCategoryName: string,
+  user: string,
+}
+
+export interface expenseDetail{
+  id?: string
+  date: string,
+  category: string,
+  amount: number,
+  description: string,
+  user: string,
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class ExpenseService {
-  updateId: string;
-  updateAmount: number;
-  updateCategory: string;
-  updateDescription: string;
-  updateDate: string;
-  endPointURL: string = "https://miniproject-d0674-default-rtdb.asia-southeast1.firebasedatabase.app/";
+  expenseDetail: expenseDetail;
+
+  endPointURL: string = "https://miniproject-d3d61-default-rtdb.asia-southeast1.firebasedatabase.app/";
   ExpenseCategoryURL: string = this.endPointURL+'ExpenseCategoryURL.json';
   ExpenseDetailURL: string = this.endPointURL+'ExpenseDetailURL.json';
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private authServ: AuthenticationService) { }
 
   addExpenseCategory(exCat: expenseCategory){
     return this.http.post<{name: string}>(this.ExpenseCategoryURL, exCat, {
@@ -25,14 +35,14 @@ export class ExpenseService {
       responseType: 'json'
     });
   }
+  
   addExpenseDetail(exDet: expenseDetail){
-    console.log(exDet);
-    console.log(exDet.date);
     return this.http.post<{date: string}>(this.ExpenseDetailURL, exDet, {
       observe: 'response',
       responseType: 'json'
     });
   }
+
   fetchExpenseCategory(){
     return this.http.get<{[key: string] : expenseCategory}>(this.ExpenseCategoryURL,{
     })
@@ -40,7 +50,7 @@ export class ExpenseService {
       map( responseData =>{
         const postArray: expenseCategory[] = [];
         for(const key in responseData){
-          if(responseData.hasOwnProperty(key)){
+          if(responseData.hasOwnProperty(key) && this.authServ.email === responseData[key].user){
             postArray.push({...responseData[key], id: key})
           }
         }
@@ -48,6 +58,7 @@ export class ExpenseService {
       })
     );
   }
+
   fetchExpenseDetails(){
     return this.http.get<{[key: string] : expenseDetail}>(this.ExpenseDetailURL,{
     })
@@ -55,7 +66,7 @@ export class ExpenseService {
       map( responseData =>{
         const postArray: expenseDetail[] = [];
         for(const key in responseData){
-          if(responseData.hasOwnProperty(key)){
+          if(responseData.hasOwnProperty(key) && this.authServ.email === responseData[key].user){
             postArray.push({...responseData[key], id: key})
           }
         }
@@ -63,27 +74,20 @@ export class ExpenseService {
       })
     );
   }
-  getUpdateData(exDet: expenseDetail){
-    console.log(exDet);
-    this.updateId = exDet.id;
-    this.updateCategory = exDet.category;
-    this.updateAmount = exDet.amount;
-    this.updateDescription = exDet.description;
-    this.updateDate = exDet.date;
-  }
+
   updateExpenseDetail(updatedData: expenseDetail){
-    console.log(updatedData.category);
     const data = { [updatedData.id] : {
       amount : updatedData.amount,
       category : updatedData.category,
       date : updatedData.date,
-      description: updatedData.description
+      description: updatedData.description,
+      user: updatedData.user
     }}
     return this.http.patch(this.ExpenseDetailURL,data);
   }
+
   deleteExpenseDetail(deletedData: expenseDetail){
     let deleteExpenseURL = this.endPointURL+"ExpenseDetailURL/"+deletedData.id+".json";
-    console.log(deleteExpenseURL);
     return this.http.delete(deleteExpenseURL);
   }
 }

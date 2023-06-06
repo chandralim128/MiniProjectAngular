@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ExpenseService } from '../expense.service';
-import { IncomeService } from '../income.service';
-import { expenseDetail } from '../expense/expense.model';
-import { incomeDetail } from '../income/income.model';
+import { ExpenseService, expenseDetail } from '../expense.service';
+import { IncomeService, incomeDetail } from '../income.service';
 import swal from "sweetalert2";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -11,59 +10,23 @@ import swal from "sweetalert2";
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+
   loadedIncomeDetails = [];
   loadedExpenseDetails = [];
   
-  constructor(private expenseService: ExpenseService, private incomeService: IncomeService) { }
+  constructor(private expenseService: ExpenseService, private incomeService: IncomeService, private router: Router) { }
 
   ngOnInit(): void {
     this.onFetchExpenseDetails();
     this.onFetchIncomeDetails();
   }
+
   onFetchIncomeDetails(){
     this.incomeService.fetchIncomeDetails().subscribe(
       (inDet) => {
         this.loadedIncomeDetails = inDet;
-        console.log(inDet)
       },
       error => {
-        console.log(error);
-      }
-    );
-  }
-  onFetchExpenseDetails(){
-    this.expenseService.fetchExpenseDetails().subscribe(
-      (exDet) => {
-        this.loadedExpenseDetails = exDet;
-        console.log(exDet)
-      },
-      error => {
-        console.log(error);
-      }
-    );
-  }
-  writeExpenseUpdate(exDet: expenseDetail){
-    console.log(exDet);
-    this.expenseService.getUpdateData(exDet);
-  }
-  writeIncomeUpdate(inDet: incomeDetail){
-    console.log(inDet);
-    this.incomeService.getUpdateData(inDet);
-  }
-  onExpenseDelete(deletedExpenseDetail: expenseDetail){
-    console.log(deletedExpenseDetail);
-    this.expenseService.deleteExpenseDetail(deletedExpenseDetail).subscribe(
-      (response) =>{
-        console.log(response);
-        swal.fire({
-          title: "Success!",
-          text: "Data Deleted!",
-          showConfirmButton: true,
-          icon: "success",
-        });
-      },
-      error => {
-        console.log(error)
         swal.fire({
           title: "Error!",
           text: error,
@@ -73,20 +36,65 @@ export class HomeComponent implements OnInit {
       }
     );
   }
-  onIncomeDelete(deletedIncomeDetail: incomeDetail){
-    console.log(deletedIncomeDetail);
-    this.incomeService.deleteIncomeDetail(deletedIncomeDetail).subscribe(
+
+  onFetchExpenseDetails(){
+    this.expenseService.fetchExpenseDetails().subscribe(
+      (exDet) => {
+        this.loadedExpenseDetails = exDet;
+      },
+      error => {
+        swal.fire({
+          title: "Error!",
+          text: error,
+          showConfirmButton: true,
+          icon: "error",
+        });
+      }
+    );
+  }
+
+  writeExpenseUpdate(exDet: expenseDetail){
+    this.expenseService.expenseDetail = exDet;
+  }
+
+  writeIncomeUpdate(inDet: incomeDetail){
+    this.incomeService.incomeDetail = inDet;
+  }
+
+  onExpenseDelete(deletedExpenseDetail: expenseDetail){
+    this.expenseService.deleteExpenseDetail(deletedExpenseDetail).subscribe(
       (response) =>{
-        console.log(response);
         swal.fire({
           title: "Success!",
           text: "Data Deleted!",
           showConfirmButton: true,
           icon: "success",
         });
+        this.onFetchExpenseDetails();
       },
       error => {
-        console.log(error)
+        swal.fire({
+          title: "Error!",
+          text: error,
+          showConfirmButton: true,
+          icon: "error",
+        });
+      }
+    );
+  }
+
+  onIncomeDelete(deletedIncomeDetail: incomeDetail){
+    this.incomeService.deleteIncomeDetail(deletedIncomeDetail).subscribe(
+      (response) =>{
+        swal.fire({
+          title: "Success!",
+          text: "Data Deleted!",
+          showConfirmButton: true,
+          icon: "success",
+        });
+        this.onFetchIncomeDetails();
+      },
+      error => {
         swal.fire({
           title: "Error!",
           text: error,

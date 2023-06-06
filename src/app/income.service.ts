@@ -1,21 +1,33 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { incomeCategory } from './income/incomeCategory.model';
-import { incomeDetail } from './income/income.model';
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
+import { AuthenticationService } from './authentication.service';
+
+export interface incomeCategory{
+  id?: string,
+  incomeCategoryName: string,
+  user: string
+}
+
+export interface incomeDetail{
+  id?: string,
+  date: string,
+  category: string,
+  amount: number,
+  description: string,
+  user: string,
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class IncomeService {
-  updateId: string;
-  updateAmount: number;
-  updateCategory: string;
-  updateDescription: string;
-  updateDate: string;
-  endPointURL: string = "https://miniproject-d0674-default-rtdb.asia-southeast1.firebasedatabase.app/";
+  incomeDetail: incomeDetail;
+
+  endPointURL: string = "https://miniproject-d3d61-default-rtdb.asia-southeast1.firebasedatabase.app/";
   IncomeCategoryURL: string = this.endPointURL+'IncomeCategoryURL.json';
   IncomeDetailURL: string = this.endPointURL+'IncomeDetailURL.json';
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private authServ: AuthenticationService) { }
 
   addIncomeCategory(inCat: incomeCategory){
     return this.http.post<{name: string}>(this.IncomeCategoryURL, inCat, {
@@ -23,14 +35,14 @@ export class IncomeService {
       responseType: 'json'
     });
   }
+
   addIncomeDetail(inDet: incomeDetail){
-    console.log(inDet);
-    console.log(inDet.date);
     return this.http.post<{date: string}>(this.IncomeDetailURL, inDet, {
       observe: 'response',
       responseType: 'json'
     });
   }
+
   fetchIncomeCategory(){
     return this.http.get<{[key: string] : incomeCategory}>(this.IncomeCategoryURL,{
     })
@@ -38,7 +50,7 @@ export class IncomeService {
       map( responseData =>{
         const postArray: incomeCategory[] = [];
         for(const key in responseData){
-          if(responseData.hasOwnProperty(key)){
+          if(responseData.hasOwnProperty(key) && this.authServ.email === responseData[key].user){
             postArray.push({...responseData[key], id: key})
           }
         }
@@ -53,7 +65,7 @@ export class IncomeService {
       map( responseData =>{
         const postArray: incomeDetail[] = [];
         for(const key in responseData){
-          if(responseData.hasOwnProperty(key)){
+          if(responseData.hasOwnProperty(key) && this.authServ.email === responseData[key].user){
             postArray.push({...responseData[key], id: key})
           }
         }
@@ -61,27 +73,20 @@ export class IncomeService {
       })
     );
   }
+
   updateIncomeDetail(updatedData: incomeDetail){
-    console.log(updatedData.category);
     const data = { [updatedData.id] : {
       amount : updatedData.amount,
       category : updatedData.category,
       date : updatedData.date,
-      description: updatedData.description
+      description: updatedData.description,
+      user: updatedData.user
     }}
     return this.http.patch(this.IncomeDetailURL,data);
   }
-  getUpdateData(inDet: incomeDetail){
-    console.log(inDet);
-    this.updateId = inDet.id;
-    this.updateCategory = inDet.category;
-    this.updateAmount = inDet.amount;
-    this.updateDescription = inDet.description;
-    this.updateDate = inDet.date;
-  }
+
   deleteIncomeDetail(deletedData: incomeDetail){
     let deleteIncomeURL = this.endPointURL+"IncomeDetailURL/"+deletedData.id+".json";
-    console.log(deleteIncomeURL);
     return this.http.delete(deleteIncomeURL);
   }
 }

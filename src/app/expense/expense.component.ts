@@ -1,32 +1,50 @@
-import { Component, OnInit } from '@angular/core';
-import { ExpenseService } from '../expense.service';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { ExpenseService, expenseCategory, expenseDetail } from '../expense.service';
 import { DatePipe } from '@angular/common';
-import { expenseCategory } from './expenseCategory.model';
 import swal from "sweetalert2";
 import { Router } from '@angular/router';
+import { AuthenticationService } from '../authentication.service';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-expense',
   templateUrl: './expense.component.html',
   styleUrls: ['./expense.component.css']
 })
-export class ExpenseComponent implements OnInit {
+export class ExpenseComponent implements OnInit, AfterViewInit {
   loadedExCats:any = [];
   date: string;
-  isDisabled: boolean;
-  constructor(private expenseService: ExpenseService, private datePipe: DatePipe, private router: Router) { 
+  expenseDetailForm: FormGroup;
+
+  constructor(private expenseService: ExpenseService, private datePipe: DatePipe, private router: Router, private authServ: AuthenticationService) { 
     this.date = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
-    this.isDisabled = true;
+  }
+
+  ngAfterViewInit(): void {
+    this.expenseDetailForm.patchValue({
+      'date': this.date
+    });
   }
 
   ngOnInit(): void {
     this.onFetchCategory();
+
+    this.expenseDetailForm = new FormGroup({
+      date: new FormControl({ value: null, disabled: true}, [Validators.required]),
+      category: new FormControl({ value: null}, [Validators.required]),
+      description: new FormControl({ value: null}, [Validators.required]),
+      amount: new FormControl({ value: null}, [Validators.required]),
+    });
   }
-  onAddCategory(exCat: { name: string;}) {
+
+  onAddCategory(nameCtg) {
+    const exCatNew: expenseCategory = {
+      expenseCategoryName: nameCtg.expenseCategoryName,
+      user: this.authServ.email
+    }
     // Send Http request
-    this.expenseService.addExpenseCategory(exCat).subscribe(
+    this.expenseService.addExpenseCategory(exCatNew).subscribe(
       (data) =>{
-        console.log(data);
         this.onFetchCategory();
         swal.fire({
           title: "Success!",
@@ -36,7 +54,6 @@ export class ExpenseComponent implements OnInit {
         });
       },
       error => {
-        console.log(error)
         swal.fire({
           title: "Error!",
           text: error,
@@ -46,11 +63,17 @@ export class ExpenseComponent implements OnInit {
       }
     );
   }
-  onAddExpenseDetail(exDet: {date: string; category: string; amount: number; description: string}){
-    exDet.date = this.date;
-    this.expenseService.addExpenseDetail(exDet).subscribe(
+
+  onAddExpenseDetail(){
+    const newExpense: expenseDetail = {
+      date: this.date,
+      category: this.expenseDetailForm.get('category').value,
+      description: this.expenseDetailForm.get('description').value,
+      amount: this.expenseDetailForm.get('amount').value,
+      user: this.authServ.email
+    }
+    this.expenseService.addExpenseDetail(newExpense).subscribe(
       (data) =>{
-        console.log(data);
         swal.fire({
           title: "Success!",
           text: "Data Added!",
@@ -60,7 +83,6 @@ export class ExpenseComponent implements OnInit {
         this.router.navigate([""]);
       },
       error => {
-        console.log(error)
         swal.fire({
           title: "Error!",
           text: error,
@@ -70,14 +92,19 @@ export class ExpenseComponent implements OnInit {
       }
     );
   }
+
   onFetchCategory(){
     this.expenseService.fetchExpenseCategory().subscribe(
       (exCat) => {
         this.loadedExCats = exCat;
-        console.log(exCat)
       },
       error => {
-        console.log(error);
+        swal.fire({
+          title: "Error!",
+          text: error,
+          showConfirmButton: true,
+          icon: "error",
+        });
       }
     );
   }
