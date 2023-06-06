@@ -27,7 +27,7 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    const email = this.loginForm.get('email').value;
+    const email: string = this.loginForm.get('email').value.toLowerCase();
     const password = this.loginForm.get('password').value;
 
     const authReqData: AuthRequestData = {

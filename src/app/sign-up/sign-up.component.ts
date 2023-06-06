@@ -36,7 +36,7 @@ export class SignUpComponent implements OnInit {
       return;
     }
 
-    const email = this.userForm.get('email').value;
+    const email: string = this.userForm.get('email').value.toLowerCase();
     const password = this.userForm.get('password').value;
     const name = this.userForm.get('name').value;
     const confpassword = this.userForm.get('confpassword').value;
