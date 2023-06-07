@@ -13,7 +13,8 @@ export class HomeComponent implements OnInit {
 
   loadedIncomeDetails = [];
   loadedExpenseDetails = [];
-  
+  totalIncome = 0;
+  totalExpense = 0;
   constructor(private expenseService: ExpenseService, private incomeService: IncomeService, private router: Router) { }
 
   ngOnInit(): void {
@@ -103,5 +104,19 @@ export class HomeComponent implements OnInit {
         });
       }
     );
+  }
+  calculateTotalIncome(): number {
+    let totalIncome = 0;
+    for (const inDet of this.loadedIncomeDetails) {
+      totalIncome += inDet.amount;
+    }
+    return totalIncome;
+  }
+  calculateTotalExpense(): number {
+    let totalExpense = 0;
+    for (const exDet of this.loadedExpenseDetails) {
+      totalExpense += exDet.amount;
+    }
+    return totalExpense;
   }
 }

@@ -22,6 +22,12 @@
                     <span style="margin-left: 10px;"></span>
                     <button class="btn btn-danger btn-sm" (click)="onIncomeDelete(inDet)">Delete</button></td>
             </tr>
+            <tr *ngIf="loadedIncomeDetails.length > 0">
+                <td colspan="1" class="fixed-width"></td>
+                <td class="fixed-width"><strong>Total:</strong></td>
+                <td class="fixed-width">{{ calculateTotalIncome() }}</td>
+                <td colspan="2" class="fixed-width"></td>
+            </tr>
             <!-- Add more rows here -->
         </tbody>
     </table>
@@ -50,6 +56,12 @@
                     <button class="btn btn-danger btn-sm" (click)="onExpenseDelete(exDet)">Delete</button></td>
             </tr>
             <!-- Add more rows here -->
+            <tr *ngIf="loadedExpenseDetails.length > 0">
+                <td colspan="1" class="fixed-width"></td>
+                <td class="fixed-width"><strong>Total:</strong></td>
+                <td class="fixed-width">{{ calculateTotalExpense() }}</td>
+                <td colspan="2" class="fixed-width"></td>
+            </tr>
         </tbody>
     </table>
 </div>
